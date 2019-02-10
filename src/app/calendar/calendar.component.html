@@ -1,0 +1,16 @@
+<div>
+    <table class='calendar'>
+        <thead>
+            <th *ngFor="let dayOfWeek of daysOfWeek">{{dayOfWeek}}</th>
+        </thead>
+        <tbody>
+            <tr class='calendarCell' *ngFor="let week of structureConfig">
+                <td [ngClass]="{'colspanCell': day.isColspan}" class='calendarCell' *ngFor="let day of week">
+                    <span class='calendarCellHeading'>
+                        {{day.int.day}}
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
