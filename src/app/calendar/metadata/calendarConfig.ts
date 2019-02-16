@@ -3,7 +3,7 @@ import * as moment from 'moment';
 // import { NumberValueAccessor } from '@angular/forms/src/directives';
 export class CalendarConfig {
 
-    private givenYear = 2019;
+    private givenYear = 2019; // temp
 
     private makeYearObject(): Array<any> {
         const output = [];
@@ -15,7 +15,6 @@ export class CalendarConfig {
 
         function getWeekCount(year, monthNumber) {
 
-            // month_number is in the range 1..12
             const firstOfMonth = new Date(year, monthNumber, 1);
             const lastOfMonth = new Date(year, monthNumber + 1, 0);
             const used = firstOfMonth.getDay() + lastOfMonth.getDate();
@@ -32,28 +31,32 @@ export class CalendarConfig {
             }
         }
 
-        function makeDayObject(date: Date ): object {
+        function makeDayObject(inputDate: Date, isColspan: boolean ): object {
 
-            const day = date.getDate();
-            const month = date.getMonth() + 1;
-            const year = date.getFullYear();
-
+            const date = inputDate.getDate();
+            const day = inputDate.getDay();
+            const month = inputDate.getMonth() + 1;
+            const year = inputDate.getFullYear();
 
             return {
-                standardisedDate: padDate(day) + '-' + padDate(month) + '-' + year,
-                // isColspan: isColspan,
+                standardisedDate: padDate(date) + '-' + padDate(month) + '-' + year,
                 assignments: [],
+                isColpan : isColspan,
                 string: {
                     days: DaysOfTheWeek[day],
                     month: MonthsOfYear[month],
                     year: year.toString()
                 },
                 int: {
-                    day: day,
+                    day: date,
                     month: month,
                     year: year
                 }
             };
+        }
+
+        function clearWeek(): void {
+            week = [];
         }
 
         function initMonthObj(): void {
@@ -74,17 +77,28 @@ export class CalendarConfig {
         }
 
         function makeLeadingMonthPadding(date: Date): void {
+            const dayOverwrite = date.getDay() === 0 ? 7 : date.getDay();
+            const colspanAmmount = Math.abs(1 - dayOverwrite);
             const leadPaddingDate = new Date(date);
-            leadPaddingDate.setDate(leadPaddingDate.getDate() - (date.getDay() - 1));
-            for (let i = 0; i < date.getDay() - 1; i++) {
-                pushDay(makeDayObject(leadPaddingDate));
+            leadPaddingDate.setDate(leadPaddingDate.getDate() - colspanAmmount);
+            for (let i = 0; i < colspanAmmount; i++) {
+                pushDay(makeDayObject(leadPaddingDate, true));
                 leadPaddingDate.setDate(leadPaddingDate.getDate() + 1 );
+            }
+        }
+
+        function makeTrailingPadding(date: Date): void {
+
+            const colspanAmmount = Math.abs(date.getDay() - 7);
+            for (let i = 0; i < colspanAmmount; i++) {
+                date.setDate(date.getDate() + 1);
+                pushDay(makeDayObject(date, true));
             }
         }
 
         for (let monthI = 0; monthI < 12; monthI++) {
             initMonthObj();
-            monthObj.month = MonthsOfYear[monthI];
+            monthObj.month = MonthsOfYear[(monthI + 1)];
             monthObj.weekCount = getWeekCount(this.givenYear, monthI);
             const dayCount = 0;
             let masterDayCount = 0;
@@ -96,12 +110,18 @@ export class CalendarConfig {
                 if (dayI === 1 && weekI === 0 && initDate.getDate() !== 0)  {
                     makeLeadingMonthPadding(initDate);
                 }
-                pushDay(makeDayObject(initDate));
+                pushDay(makeDayObject(initDate, false));
                 initDate.setDate(initDate.getDate() + 1);
+
+                if (masterDayCount ===  new Date(initDate.getFullYear(), initDate.getMonth(), 0).getDate()) {
+
+                    makeTrailingPadding(new Date(initDate.setDate(initDate.getDate() - 1)));
+                }
 
                 }
             }
             output.push(monthObj);
+            clearWeek();
         }
         console.log(output);
         return output;
