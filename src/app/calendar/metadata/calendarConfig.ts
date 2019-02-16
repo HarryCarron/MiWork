@@ -13,13 +13,21 @@ export class CalendarConfig {
 
         initMonthObj();
 
-        function getWeekCount(year, monthNumber) {
+        // function getWeekCount(year, monthNumber) {
 
-            const firstOfMonth = new Date(year, monthNumber, 1);
-            const lastOfMonth = new Date(year, monthNumber + 1, 0);
-            const used = firstOfMonth.getDay() + lastOfMonth.getDate();
-            return Math.ceil( used / 7);
+        //     const firstOfMonth = new Date(year, monthNumber, 1);
+        //     const lastOfMonth = new Date(year, monthNumber + 1, 0);
+        //     const used = firstOfMonth.getDay() + lastOfMonth.getDate();
+        //     return Math.ceil( used / 7);
+        // }
+
+        function getWeekCount(year: number, month: number): number {
+            const date = new Date(year, month - 1, 1);
+            const day = date.getDay();
+            const numDaysInMonth = new Date(year, month, 0).getDate();
+            return Math.ceil((numDaysInMonth + day) / 7);
         }
+
 
 
         function pushDay(day: Object): void {
@@ -41,7 +49,7 @@ export class CalendarConfig {
             return {
                 standardisedDate: padDate(date) + '-' + padDate(month) + '-' + year,
                 assignments: [],
-                isColpan : isColspan,
+                isColspan : isColspan,
                 string: {
                     days: DaysOfTheWeek[day],
                     month: MonthsOfYear[month],
@@ -97,13 +105,13 @@ export class CalendarConfig {
         }
 
         for (let monthI = 0; monthI < 12; monthI++) {
+            initDate = new Date (this.givenYear, monthI, 1);
             initMonthObj();
             monthObj.month = MonthsOfYear[(monthI + 1)];
+            monthObj.year = initDate.getFullYear();
             monthObj.weekCount = getWeekCount(this.givenYear, monthI);
             const dayCount = 0;
             let masterDayCount = 0;
-            initDate = new Date (this.givenYear, monthI, 1);
-
             for (let weekI = 0; weekI <= monthObj.weekCount - 1 ; weekI++) {
                 for (let dayI = 1; dayI <= 7; dayI++) {
                 masterDayCount++;
