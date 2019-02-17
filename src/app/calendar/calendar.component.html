@@ -1,19 +1,28 @@
-<div class='calendarContainer' *ngFor="let month of calendarConfig">
-    <div class='calendarHeading'><span class='calendarHeading-month'>{{month.month}}</span><span class='calendarHeading-year'> {{month.year}}</span></div>
-    <table class='calendar'>
-        <thead>
-            <tr class='tableHeadingRow'>
-                    <th *ngFor="let dayOfWeek of daysOfWeek">{{dayOfWeek}}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class='calendarCell' *ngFor="let week of month.weeks">
-                <td [ngClass]="{'colspanCell': day.isColspan}" class='calendarCell' *ngFor="let day of week">
-                    <span class='calendarCellHeading'>
-                        {{day.int.day}}
-                    </span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<div class='mainCalendarContainer'>
+    <!-- <div class='calendarToolBar'>
+
+
+    </div> -->
+    <div class='innerCalendarContainer'>
+            <div id='{{"scroll-" + month.month.toLowerCase()}}' class='calendarContainer' *ngFor="let month of calendarConfig">
+            <div class='calendarHeading'><span class='calendarHeading-month'>{{month.month}}</span><span class='calendarHeading-year'> {{month.year}}</span></div>
+            <table class='calendar'>
+                <thead>
+                    <tr class='tableHeadingRow'>
+                            <th *ngFor="let dayOfWeek of daysOfWeek">{{dayOfWeek}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class='calendarCell' *ngFor="let week of month.weeks">
+                        <td [ngClass]="{'colspanCell': day.isColspan}" class='calendarCell' *ngFor="let day of week">
+                            <span class='calendarCellHeading'>
+                                {{day.int.day}}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
 </div>

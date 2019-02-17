@@ -1,6 +1,5 @@
 import { DaysOfTheWeek, MonthsOfYear } from './enums/calendarEnums';
 import * as moment from 'moment';
-// import { NumberValueAccessor } from '@angular/forms/src/directives';
 export class CalendarConfig {
 
     private givenYear = 2019; // temp
@@ -11,22 +10,20 @@ export class CalendarConfig {
         let initDate: Date = (new Date(this.givenYear, 0, 1));
         let monthObj = null;
 
-        initMonthObj();
+        function getWeekCount(year, monthNumber) {
 
-        // function getWeekCount(year, monthNumber) {
-
-        //     const firstOfMonth = new Date(year, monthNumber, 1);
-        //     const lastOfMonth = new Date(year, monthNumber + 1, 0);
-        //     const used = firstOfMonth.getDay() + lastOfMonth.getDate();
-        //     return Math.ceil( used / 7);
-        // }
-
-        function getWeekCount(year: number, month: number): number {
-            const date = new Date(year, month - 1, 1);
-            const day = date.getDay();
-            const numDaysInMonth = new Date(year, month, 0).getDate();
-            return Math.ceil((numDaysInMonth + day) / 7);
+            const firstOfMonth = new Date(year, monthNumber, 1);
+            const lastOfMonth = new Date(year, monthNumber + 1, 0);
+            const used = firstOfMonth.getDay() + lastOfMonth.getDate();
+            return Math.ceil( used / 7);
         }
+
+        // function getWeekCount(year: number, month: number): number {
+        //     const date = new Date(year, month - 1, 1);
+        //     const day = date.getDay();
+        //     const numDaysInMonth = new Date(year, month, 0).getDate();
+        //     return Math.ceil((numDaysInMonth + day) / 7);
+        // }
 
 
 
@@ -35,7 +32,7 @@ export class CalendarConfig {
             week.push(day);
             if (week.length === 7) {
                 monthObj.weeks.push(week);
-                week = [];
+                clearWeek();
             }
         }
 
@@ -96,8 +93,8 @@ export class CalendarConfig {
         }
 
         function makeTrailingPadding(date: Date): void {
-
-            const colspanAmmount = Math.abs(date.getDay() - 7);
+            date.setDate(date.getDate() + 1);
+            const colspanAmmount = Math.abs(week.length - 7);
             for (let i = 0; i < colspanAmmount; i++) {
                 date.setDate(date.getDate() + 1);
                 pushDay(makeDayObject(date, true));
@@ -110,20 +107,21 @@ export class CalendarConfig {
             monthObj.month = MonthsOfYear[(monthI + 1)];
             monthObj.year = initDate.getFullYear();
             monthObj.weekCount = getWeekCount(this.givenYear, monthI);
-            const dayCount = 0;
-            let masterDayCount = 0;
+            let dayCount = 0;
+            console.log(MonthsOfYear[monthI + 1] + ': ' + new Date(initDate.getFullYear(), initDate.getMonth() + 1, 0).getDate());
             for (let weekI = 0; weekI <= monthObj.weekCount - 1 ; weekI++) {
                 for (let dayI = 1; dayI <= 7; dayI++) {
-                masterDayCount++;
+                    dayCount++;
                 if (dayI === 1 && weekI === 0 && initDate.getDate() !== 0)  {
                     makeLeadingMonthPadding(initDate);
                 }
                 pushDay(makeDayObject(initDate, false));
                 initDate.setDate(initDate.getDate() + 1);
-
-                if (masterDayCount ===  new Date(initDate.getFullYear(), initDate.getMonth(), 0).getDate()) {
-
-                    makeTrailingPadding(new Date(initDate.setDate(initDate.getDate() - 1)));
+                const test = new Date(initDate.getFullYear(), initDate.getMonth() + 1, 0).getDate() - 1;
+                if (dayCount === test) {
+                    pushDay(makeDayObject(initDate, false));
+                    makeTrailingPadding(initDate);
+                    break;
                 }
 
                 }
