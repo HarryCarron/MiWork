@@ -10,20 +10,21 @@ export class CalendarConfig {
         let initDate: Date = (new Date(this.givenYear, 0, 1));
         let monthObj = null;
 
-        function getWeekCount(year, monthNumber) {
+        function getWeekCount(date) {
+            const dayOverwrite = date.getDay() === 0 ? 7 : date.getDay();
+            const colspanAmmount = Math.abs(1 - dayOverwrite);
+            const internalDate = new Date(date);
+            const numberOfDays = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
+            const test = Math.abs(internalDate.getDay() - 7);
 
-            const firstOfMonth = new Date(year, monthNumber, 1);
-            const lastOfMonth = new Date(year, monthNumber + 1, 0);
-            const used = firstOfMonth.getDay() + lastOfMonth.getDate();
-            return Math.ceil( used / 7);
+            const test2 = colspanAmmount + numberOfDays + test;
+            const quotient = Math.floor( test2 / 7 );
+            console.log(quotient);
+            return quotient;
+
+
         }
 
-        // function getWeekCount(year: number, month: number): number {
-        //     const date = new Date(year, month - 1, 1);
-        //     const day = date.getDay();
-        //     const numDaysInMonth = new Date(year, month, 0).getDate();
-        //     return Math.ceil((numDaysInMonth + day) / 7);
-        // }
 
 
 
@@ -106,13 +107,13 @@ export class CalendarConfig {
             initMonthObj();
             monthObj.month = MonthsOfYear[(monthI + 1)];
             monthObj.year = initDate.getFullYear();
-            monthObj.weekCount = getWeekCount(this.givenYear, monthI);
+            monthObj.weekCount = getWeekCount(initDate);
             let dayCount = 0;
             console.log(MonthsOfYear[monthI + 1] + ': ' + new Date(initDate.getFullYear(), initDate.getMonth() + 1, 0).getDate());
-            for (let weekI = 0; weekI <= monthObj.weekCount - 1 ; weekI++) {
+            for (let weekI = 1; weekI <= monthObj.weekCount ; weekI++) {
                 for (let dayI = 1; dayI <= 7; dayI++) {
                     dayCount++;
-                if (dayI === 1 && weekI === 0 && initDate.getDate() !== 0)  {
+                if (dayI === 1 && weekI === 1 && initDate.getDate() !== 0)  {
                     makeLeadingMonthPadding(initDate);
                 }
                 pushDay(makeDayObject(initDate, false));
