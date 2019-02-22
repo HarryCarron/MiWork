@@ -10,19 +10,12 @@ export class CalendarConfig {
         let initDate: Date = (new Date(this.givenYear, 0, 1));
         let monthObj = null;
 
-        function getWeekCount(date) {
-            const dayOverwrite = date.getDay() === 0 ? 7 : date.getDay();
-            const colspanAmmount = Math.abs(1 - dayOverwrite);
-            const internalDate = new Date(date);
-            const numberOfDays = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
-            const test = Math.abs(internalDate.getDay() - 7);
+        function getWeekCount(date: Date): Number {
 
-            const test2 = colspanAmmount + numberOfDays + test;
-            const quotient = Math.floor( test2 / 7 );
-            console.log(quotient);
-            return quotient;
-
-
+            return Math.ceil(
+                Math.abs(1 - date.getDay() === 0 ? 7 : date.getDay()) +
+                new Date(date.getFullYear(), date.getMonth(), 0).getDate() / 7
+            );
         }
 
 
@@ -109,22 +102,25 @@ export class CalendarConfig {
             monthObj.year = initDate.getFullYear();
             monthObj.weekCount = getWeekCount(initDate);
             let dayCount = 0;
+            let stopMonthLoop = false;
             console.log(MonthsOfYear[monthI + 1] + ': ' + new Date(initDate.getFullYear(), initDate.getMonth() + 1, 0).getDate());
             for (let weekI = 1; weekI <= monthObj.weekCount ; weekI++) {
-                for (let dayI = 1; dayI <= 7; dayI++) {
-                    dayCount++;
-                if (dayI === 1 && weekI === 1 && initDate.getDate() !== 0)  {
-                    makeLeadingMonthPadding(initDate);
-                }
-                pushDay(makeDayObject(initDate, false));
-                initDate.setDate(initDate.getDate() + 1);
-                const test = new Date(initDate.getFullYear(), initDate.getMonth() + 1, 0).getDate() - 1;
-                if (dayCount === test) {
-                    pushDay(makeDayObject(initDate, false));
-                    makeTrailingPadding(initDate);
-                    break;
-                }
-
+                if (!stopMonthLoop) {
+                    for (let dayI = 1; dayI <= 7; dayI++) {
+                        dayCount++;
+                        if (dayI === 1 && weekI === 1 && initDate.getDate() !== 0)  {
+                            makeLeadingMonthPadding(initDate);
+                        }
+                        pushDay(makeDayObject(initDate, false));
+                        initDate.setDate(initDate.getDate() + 1);
+                        const test = new Date(initDate.getFullYear(), initDate.getMonth() + 1, 0).getDate() - 1;
+                        if (dayCount === test) {
+                            pushDay(makeDayObject(initDate, false));
+                            makeTrailingPadding(initDate);
+                            stopMonthLoop = true;
+                            break;
+                        }
+                    }
                 }
             }
             output.push(monthObj);
