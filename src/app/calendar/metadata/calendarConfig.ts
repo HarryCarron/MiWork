@@ -11,7 +11,6 @@ export class CalendarConfig {
         let monthObj = null;
 
         function getWeekCount(date: Date): Number {
-
             return Math.ceil(
                 Math.abs(1 - date.getDay() === 0 ? 7 : date.getDay()) +
                 new Date(date.getFullYear(), date.getMonth(), 0).getDate() / 7
@@ -87,7 +86,6 @@ export class CalendarConfig {
         }
 
         function makeTrailingPadding(date: Date): void {
-            date.setDate(date.getDate() + 1);
             const colspanAmmount = Math.abs(week.length - 7);
             for (let i = 0; i < colspanAmmount; i++) {
                 date.setDate(date.getDate() + 1);
