@@ -1,0 +1,7 @@
+.bodyContainer{
+    display:flex;
+}
+
+.mainContainer{
+    flex-direction: column;
+}

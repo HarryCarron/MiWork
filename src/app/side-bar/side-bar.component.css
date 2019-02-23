@@ -1,0 +1,21 @@
+.sideBarContainer{
+    height:100vh;
+    transition:1s;
+    background-color:#fff;
+    display:flex;
+    border-right:1px solid #ccc;
+}
+
+/* .sideBarInnerContainer{
+}
+
+.openButtonContainer{
+} */
+
+.sideBar-open{
+    width:280px !important;
+}
+
+.sideBar-closed{
+    width:20px !important;
+}

@@ -24,7 +24,7 @@ export class CalendarComponent implements OnInit {
             if ($('.innerCalendarContainer').length) {
                 $('.innerCalendarContainer').animate({
                     scrollTop: $('#scroll-' + thisMonth).offset().top
-                }, 800);
+                }, 400);
             }
          }, 100);
     }

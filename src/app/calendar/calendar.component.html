@@ -1,8 +1,5 @@
 <div class='mainCalendarContainer'>
-    <!-- <div class='calendarToolBar'>
-
-
-    </div> -->
+  <!-- <app-tool-bar></app-tool-bar> -->
     <div class='innerCalendarContainer'>
             <div id='{{"scroll-" + month.month.toLowerCase()}}' class='calendarContainer' *ngFor="let month of calendarConfig">
             <div class='calendarHeading'><span class='calendarHeading-month'>{{month.month}}</span><span class='calendarHeading-year'> {{month.year}}</span></div>
@@ -14,7 +11,7 @@
                 </thead>
                 <tbody>
                     <tr class='calendarCell' *ngFor="let week of month.weeks">
-                        <td [ngClass]="{'colspanCell': day.isColspan}" class='calendarCell' *ngFor="let day of week">
+                        <td [ngClass]="{'colspanCell': day.isColspan, 'weekendCell':day.isWeekend}" class='calendarCell' *ngFor="let day of week">
                             <span class='calendarCellHeading'>
                                 {{day.int.day}}
                             </span>

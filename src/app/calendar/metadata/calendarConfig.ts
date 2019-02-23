@@ -35,10 +35,10 @@ export class CalendarConfig {
             const day = inputDate.getDay();
             const month = inputDate.getMonth() + 1;
             const year = inputDate.getFullYear();
-
             return {
                 standardisedDate: padDate(date) + '-' + padDate(month) + '-' + year,
                 assignments: [],
+                isweekend: ([6, 0].indexOf(day) !== -1),
                 isColspan : isColspan,
                 string: {
                     days: DaysOfTheWeek[day],
