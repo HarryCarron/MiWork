@@ -1,0 +1,14 @@
+.cellContainer{
+    height:100%;
+}
+
+.cellHeader{
+    height:10%;
+    background-color:red;
+}
+
+.cellBody{
+    height:90%;
+    background-color:green;
+    align-items:flex-end
+}

@@ -4,6 +4,44 @@ export class CalendarConfig {
 
     private givenYear = 2019; // temp
 
+    private makeCalendarCellTestData(): Array<any> {
+        const subjects = [
+            {subject: 'science',
+            color: '#EF9A9A'
+            },
+            {
+                subject: 'maths',
+                color: '#F48FB1'
+            },
+            {
+                subject: 'english',
+                color: '#CE93D8'
+            },
+            {
+                subject: 'french',
+                color: '#B39DDB',
+
+            },
+            {
+                subject: 'geography',
+                color: '#9FA8DA'
+            },
+            {
+                subject: 'russian',
+                color: '#90CAF9'
+            }
+        ];
+        return Array.from({length: (Math.floor(Math.random() * Math.floor(3)))}).map(function() {
+            const randomIndex = Math.floor(Math.random() * Math.floor(subjects.length));
+            return {
+                subject: subjects[randomIndex].subject,
+                color: subjects[randomIndex].color,
+                data: 'test'
+            };
+        });
+
+    }
+
     private makeYearObject(): Array<any> {
         const output = [];
         let week = [];
@@ -29,7 +67,7 @@ export class CalendarConfig {
             }
         }
 
-        function makeDayObject(inputDate: Date, isColspan: boolean ): object {
+        const makeDayObject = (inputDate: Date, isColspan: boolean ): object => {
 
             const date = inputDate.getDate();
             const day = inputDate.getDay();
@@ -37,7 +75,7 @@ export class CalendarConfig {
             const year = inputDate.getFullYear();
             return {
                 standardisedDate: padDate(date) + '-' + padDate(month) + '-' + year,
-                assignments: [],
+                assignments: (month === 2) ? this.makeCalendarCellTestData() : [],
                 isweekend: ([6, 0].indexOf(day) !== -1),
                 isColspan : isColspan,
                 string: {

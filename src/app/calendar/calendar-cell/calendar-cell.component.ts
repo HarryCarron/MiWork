@@ -9,6 +9,7 @@ export class CalendarCellComponent {
 
   constructor() { }
 
-  @Input() dateMetadata: object = null;
+  @Input() dayData: object;
+  private hello = 'hello';
 
 }

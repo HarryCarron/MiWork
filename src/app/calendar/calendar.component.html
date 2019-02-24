@@ -6,20 +6,17 @@
             <table class='calendar'>
                 <thead>
                     <tr class='tableHeadingRow'>
-                            <th *ngFor="let dayOfWeek of daysOfWeek">{{dayOfWeek}}</th>
+                        <th *ngFor="let dayOfWeek of daysOfWeek">{{dayOfWeek}}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class='calendarCell' *ngFor="let week of month.weeks">
                         <td [ngClass]="{'colspanCell': day.isColspan, 'weekendCell':day.isWeekend}" class='calendarCell' *ngFor="let day of week">
-                            <span class='calendarCellHeading'>
-                                {{day.int.day}}
-                            </span>
+                            <app-calendar-cell [dayData]='day'></app-calendar-cell>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    
 </div>

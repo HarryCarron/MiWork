@@ -12,7 +12,7 @@ declare var $: any;
 })
 
 export class CalendarComponent implements OnInit {
-    @Input() metadata: Array<any>;
+    // @Input() metadata: Array<any>;
     daysOfWeek: Array<any> = Array.from({length: 7}).map(function(j, i) { return DaysOfTheWeek[(i + 1)]; });
     calendarMetadata: any = new CalendarConfig();
     calendarConfig: any = this.calendarMetadata.makeYearObject();
@@ -28,8 +28,4 @@ export class CalendarComponent implements OnInit {
             }
          }, 100);
     }
-
-
-
-
 }
