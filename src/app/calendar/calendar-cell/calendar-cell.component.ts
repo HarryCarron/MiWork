@@ -10,6 +10,5 @@ export class CalendarCellComponent {
   constructor() { }
 
   @Input() dayData: object;
-  private hello = 'hello';
 
 }

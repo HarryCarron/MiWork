@@ -139,7 +139,6 @@ export class CalendarConfig {
             monthObj.weekCount = getWeekCount(initDate);
             let dayCount = 0;
             let stopMonthLoop = false;
-            console.log(MonthsOfYear[monthI + 1] + ': ' + new Date(initDate.getFullYear(), initDate.getMonth() + 1, 0).getDate());
             for (let weekI = 1; weekI <= monthObj.weekCount ; weekI++) {
                 if (!stopMonthLoop) {
                     for (let dayI = 1; dayI <= 7; dayI++) {

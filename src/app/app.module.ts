@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MaterialModule } from './material';
 import { SideBarComponent } from './side-bar/side-bar.component';
 import { HeaderBarComponent } from './header-bar/header-bar.component';
+import { Calendar2Component } from './calendar2/calendar2.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { HeaderBarComponent } from './header-bar/header-bar.component';
     CalendarCellComponent,
     ToolBarComponent,
     SideBarComponent,
-    HeaderBarComponent
+    HeaderBarComponent,
+    Calendar2Component
   ],
   imports: [
     BrowserModule,
