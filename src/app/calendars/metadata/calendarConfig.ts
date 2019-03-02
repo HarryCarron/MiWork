@@ -1,13 +1,19 @@
-import { DaysOfTheWeek, MonthsOfYear } from './enums/calendarEnums';
-import * as moment from 'moment';
+import { DaysOfTheWeek, MonthsOfYear } from './../../enums/calendarEnums';
 export class CalendarConfig {
 
-    private givenYear = 2019; // temp
+    constructor(initDate: Date, mode: String) {
+        this.InitDate = initDate;
+        this.mode = mode;
+    }
+
+    private InitDate: Date = null;
+    private mode: String = null;
 
     private makeCalendarCellTestData(): Array<any> {
         const subjects = [
-            {subject: 'science',
-            color: '#EF9A9A'
+            {
+                subject: 'science',
+                color: '#EF9A9A'
             },
             {
                 subject: 'maths',
@@ -20,7 +26,6 @@ export class CalendarConfig {
             {
                 subject: 'french',
                 color: '#B39DDB',
-
             },
             {
                 subject: 'geography',
@@ -31,7 +36,7 @@ export class CalendarConfig {
                 color: '#90CAF9'
             }
         ];
-        return Array.from({length: (Math.floor(Math.random() * Math.floor(3)))}).map(function() {
+        return Array.from({length: (Math.floor(Math.random() * 3))}).map(function() {
             const randomIndex = Math.floor(Math.random() * Math.floor(subjects.length));
             return {
                 subject: subjects[randomIndex].subject,
@@ -42,26 +47,26 @@ export class CalendarConfig {
 
     }
 
-    private makeYearObject(): Array<any> {
+
+    public makeCalendarConfig = (): object => {
+
+        let initDate: Date = (new Date(this.InitDate.getFullYear(), 0, 1));
         const output = [];
         let week = [];
-        let initDate: Date = (new Date(this.givenYear, 0, 1));
+
         let monthObj = null;
 
         function getWeekCount(date: Date): Number {
             return Math.ceil(
-                Math.abs(1 - date.getDay() === 0 ? 7 : date.getDay()) +
+                Math.abs(1 - (date.getDay() === 0 ? 7 : date.getDay())) +
                 new Date(date.getFullYear(), date.getMonth(), 0).getDate() / 7
             );
         }
 
-
-
-
-        function pushDay(day: Object): void {
+        function pushDay(day: Object, override: boolean): void {
 
             week.push(day);
-            if (week.length === 7) {
+            if (week.length === 7 || override) {
                 monthObj.weeks.push(week);
                 clearWeek();
             }
@@ -75,7 +80,7 @@ export class CalendarConfig {
             const year = inputDate.getFullYear();
             return {
                 standardisedDate: padDate(date) + '-' + padDate(month) + '-' + year,
-                assignments: (month === 2) ? this.makeCalendarCellTestData() : [],
+                assignments: (Math.floor(Math.random() * 5) > 3) ? this.makeCalendarCellTestData() : [],
                 isweekend: ([6, 0].indexOf(day) !== -1),
                 isColspan : isColspan,
                 string: {
@@ -89,7 +94,7 @@ export class CalendarConfig {
                     year: year
                 }
             };
-        }
+        };
 
         function clearWeek(): void {
             week = [];
@@ -118,7 +123,7 @@ export class CalendarConfig {
             const leadPaddingDate = new Date(date);
             leadPaddingDate.setDate(leadPaddingDate.getDate() - colspanAmmount);
             for (let i = 0; i < colspanAmmount; i++) {
-                pushDay(makeDayObject(leadPaddingDate, true));
+                pushDay(makeDayObject(leadPaddingDate, true), false);
                 leadPaddingDate.setDate(leadPaddingDate.getDate() + 1 );
             }
         }
@@ -127,13 +132,14 @@ export class CalendarConfig {
             const colspanAmmount = Math.abs(week.length - 7);
             for (let i = 0; i < colspanAmmount; i++) {
                 date.setDate(date.getDate() + 1);
-                pushDay(makeDayObject(date, true));
+                pushDay(makeDayObject(date, true), false);
             }
         }
 
         for (let monthI = 0; monthI < 12; monthI++) {
-            initDate = new Date (this.givenYear, monthI, 1);
+            initDate = new Date (this.InitDate.getFullYear(), monthI, 1);
             initMonthObj();
+            const finalDay = new Date(initDate.getFullYear(), initDate.getMonth() + 1, 0).getDate() - 1;
             monthObj.month = MonthsOfYear[(monthI + 1)];
             monthObj.year = initDate.getFullYear();
             monthObj.weekCount = getWeekCount(initDate);
@@ -143,15 +149,16 @@ export class CalendarConfig {
                 if (!stopMonthLoop) {
                     for (let dayI = 1; dayI <= 7; dayI++) {
                         dayCount++;
-                        if (dayI === 1 && weekI === 1 && initDate.getDate() !== 0)  {
+                        if (this.mode === 'calendar2' && dayI === 1 && weekI === 1 && initDate.getDate() !== 0)  {
                             makeLeadingMonthPadding(initDate);
                         }
-                        pushDay(makeDayObject(initDate, false));
+                        pushDay(makeDayObject(initDate, false), false);
                         initDate.setDate(initDate.getDate() + 1);
-                        const test = new Date(initDate.getFullYear(), initDate.getMonth() + 1, 0).getDate() - 1;
-                        if (dayCount === test) {
-                            pushDay(makeDayObject(initDate, false));
-                            makeTrailingPadding(initDate);
+                        if (dayCount === finalDay) {
+                            pushDay(makeDayObject(initDate, false), (dayCount === finalDay && this.mode === 'calendar1'));
+                            if (this.mode === 'calendar2') {
+                                makeTrailingPadding(initDate);
+                            }
                             stopMonthLoop = true;
                             break;
                         }
@@ -161,7 +168,7 @@ export class CalendarConfig {
             output.push(monthObj);
             clearWeek();
         }
-        console.log(output);
-        return output;
+            console.log(output);
+            return output;
     }
 }

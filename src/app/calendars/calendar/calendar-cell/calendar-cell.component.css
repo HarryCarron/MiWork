@@ -1,0 +1,21 @@
+.cellContainer{
+    height:100%;
+}
+
+.cellNumber{
+    padding:5px;
+    font-size:0.7em;
+}
+
+.cellBody{
+    height:90%;
+    align-items:flex-end
+}
+
+.assignment{
+    padding:5px 5px 5px 10px;
+    color:#fff;
+    font-size:0.7em;
+    margin:2px;
+    border-radius:5px;
+}

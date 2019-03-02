@@ -1,7 +1,8 @@
 .conainter{
-    background-color:#545454;
+    background-color:white;
     height:50px;
     color:white;
+    border-bottom: 1px solid #f1f1f1;
 }
 .leftPadder80{
     width:80%;

@@ -1,0 +1,11 @@
+<div class='cellContainer'>
+    <div class='cellNumber'>       
+        <span>{{dayData.int.day}}</span>
+    </div>
+    <div [style.font-size]="fontSize+'px'" class='cellBody'>
+        <div class='assignment' [style.background-color] = "assignment.color"
+        *ngFor="let assignment of dayData.assignments" >
+            {{assignment.subject}}
+        </div>
+    </div>
+</div>
