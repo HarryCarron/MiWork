@@ -2,7 +2,12 @@
     background-color:white;
     height:50px;
     color:white;
-    border-bottom: 1px solid #f1f1f1;
+    /* border-bottom: 1px solid #f1f1f1; */
+}
+
+.innerContainer{
+    height:100%;
+    border-bottom:1px solid #ccc;
 }
 .leftPadder80{
     width:80%;

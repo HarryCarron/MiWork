@@ -3,9 +3,11 @@
         <span>{{dayData.int.day}}</span>
     </div>
     <div [style.font-size]="fontSize+'px'" class='cellBody'>
-        <div class='assignment' [style.background-color] = "assignment.color"
-        *ngFor="let assignment of dayData.assignments" >
-            {{assignment.subject}}
+        <div
+        class='assignment'
+        [style.background-color] = "assignment.color"
+        *ngFor="let assignment of dayData.assignments">
+            <span>{{assignment.subject}}</span>
         </div>
     </div>
 </div>

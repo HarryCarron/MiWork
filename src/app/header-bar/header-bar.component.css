@@ -1,4 +1,10 @@
 .headerContainer{
     height:50px;
-    border-bottom:1px solid #cccccc80;
+    width:100%;
+    z-index:200;
+    border-bottom:1px solid #ccc;
+}
+
+.headerInnerContainer{
+    height:100%;
 }

@@ -1,13 +1,13 @@
 import { DaysOfTheWeek, MonthsOfYear } from './../../enums/calendarEnums';
 export class CalendarConfig {
 
-    constructor(initDate: Date, mode: String) {
+    constructor(initDate: Date, renderBleed: Boolean) {
         this.InitDate = initDate;
-        this.mode = mode;
+        this.renderBleed = renderBleed;
     }
 
     private InitDate: Date = null;
-    private mode: String = null;
+    private renderBleed: Boolean = null;
 
     private makeCalendarCellTestData(): Array<any> {
         const subjects = [
@@ -47,7 +47,6 @@ export class CalendarConfig {
 
     }
 
-
     public makeCalendarConfig = (): object => {
 
         let initDate: Date = (new Date(this.InitDate.getFullYear(), 0, 1));
@@ -64,7 +63,6 @@ export class CalendarConfig {
         }
 
         function pushDay(day: Object, override: boolean): void {
-
             week.push(day);
             if (week.length === 7 || override) {
                 monthObj.weeks.push(week);
@@ -149,14 +147,14 @@ export class CalendarConfig {
                 if (!stopMonthLoop) {
                     for (let dayI = 1; dayI <= 7; dayI++) {
                         dayCount++;
-                        if (this.mode === 'calendar2' && dayI === 1 && weekI === 1 && initDate.getDate() !== 0)  {
+                        if (this.renderBleed && dayI === 1 && weekI === 1 && initDate.getDate() !== 0)  {
                             makeLeadingMonthPadding(initDate);
                         }
                         pushDay(makeDayObject(initDate, false), false);
                         initDate.setDate(initDate.getDate() + 1);
                         if (dayCount === finalDay) {
-                            pushDay(makeDayObject(initDate, false), (dayCount === finalDay && this.mode === 'calendar1'));
-                            if (this.mode === 'calendar2') {
+                            pushDay(makeDayObject(initDate, false), false);
+                            if (this.renderBleed && week.length > 0) {
                                 makeTrailingPadding(initDate);
                             }
                             stopMonthLoop = true;
