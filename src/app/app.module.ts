@@ -28,6 +28,7 @@ import { CalendarConfig } from './calendars/metadata/calendarConfig';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     MaterialModule,
     MatFormFieldModule
   ],

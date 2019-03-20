@@ -1,8 +1,11 @@
 <div class='conainter'>
     <div class='innerContainer'>
-        <div class='leftPadder80'>
+        <div class='leftContainer'>
         </div>
-        <div class='toolsContainer'>
+        <div class='rightContainer'>
+            <select [(ngModel)]='monthSelection' (change)="selectMonth(monthSelection)" class='monthSelector'>
+                <option [value]='month' *ngFor='let month of daysOfWeek'>{{month}}</option>
+            </select>
         </div>
     </div>
 </div>

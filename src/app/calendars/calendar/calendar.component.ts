@@ -17,17 +17,20 @@ export class CalendarComponent implements OnInit {
     daysOfWeek: Array<any> = Array.from(
         {length: 7}).map((j, i) =>  DaysOfTheWeek[i + 1]);
 
-    public scrollToMonth (month: number | null): void {
-        const thisMonth: String = MonthsOfYear[((month + 1)
-            || new Date().getMonth() + 1)].toLowerCase();
+    selectedMonth: number = null;
+
+    public scrollToMonth (month: number): void {
+        const thisMonth: String = MonthsOfYear[month].toLowerCase();
         $('.innerCalendarContainer').animate(
             { scrollTop: $('#scroll-' + thisMonth).offset().top - 100 }
             , 1000);
+
+            this.selectedMonth = month + 1;
     }
 
     ngOnInit() {
         setTimeout(() => {
-            this.scrollToMonth(4);
+            this.scrollToMonth(new Date().getMonth() + 1);
          }, 400);
     }
 }
