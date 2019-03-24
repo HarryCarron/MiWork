@@ -14,6 +14,7 @@ import { MaterialModule } from './material';
 import { SideBarComponent } from './side-bar/side-bar.component';
 import { HeaderBarComponent } from './header-bar/header-bar.component';
 import { CalendarConfig } from './calendars/metadata/calendarConfig';
+import { TrayComponent } from './calendars/calendar/tray/tray.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { CalendarConfig } from './calendars/metadata/calendarConfig';
     SideBarComponent,
     HeaderBarComponent,
     CalendarComponent,
-    Calendar2Component
+    Calendar2Component,
+    TrayComponent
   ],
   imports: [
     BrowserModule,

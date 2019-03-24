@@ -1,5 +1,5 @@
 <div class='mainCalendarContainer'>
-<app-tool-bar class='toolBar'></app-tool-bar>
+<app-tool-bar (monthSelected) = "scrollToMonth($event)" class='toolBar'></app-tool-bar>
     <div class='innerCalendarContainer'>
             <div id='{{"scroll-" + month.month.toLowerCase()}}' class='calendarContainer' *ngFor="let month of calendarMetadata">
             <div class='calendarHeading'><span class='calendarHeading-month'>{{month.month}}</span><span class='calendarHeading-year'> {{month.year}}</span></div>
