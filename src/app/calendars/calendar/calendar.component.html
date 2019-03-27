@@ -11,7 +11,7 @@
                 </thead>
                 <tbody>
                     <tr class='calendarCellRow' *ngFor="let week of month.weeks">
-                        <td [ngClass]="{'colspanCell': day.isColspan, 'weekendCell':day.isWeekend}" class='calendarCell' *ngFor="let day of week">
+                        <td [ngStyle]='cellStyle(i)' [ngClass]="cellBackground(i, day)" class='calendarCell' *ngFor="let day of week; let i = index;">
                             <app-calendar-cell [dayData]='day'></app-calendar-cell>
                         </td>
                     </tr>

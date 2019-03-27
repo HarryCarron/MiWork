@@ -3,8 +3,16 @@
         <div class='leftContainer'>
         </div>
         <div class='rightContainer'>
-            <select [(ngModel)]='monthSelection' (change)="selectMonth(monthSelection)" class='monthSelector'>
-                <option [value]='month' *ngFor='let month of daysOfWeek'>{{month}}</option>
+            <select [value]='selectedMonthString'
+                [(ngModel)]='monthSelection'
+                (change)="selectMonth(monthSelection)"
+                class='monthSelector'>
+                
+                <option [value]='month'
+                    *ngFor='let month of monthsOfYear'>
+                        {{month}}
+                </option>
+
             </select>
         </div>
     </div>

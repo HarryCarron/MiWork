@@ -78,8 +78,8 @@ export class CalendarConfig {
             const year = inputDate.getFullYear();
             return {
                 standardisedDate: padDate(date) + '-' + padDate(month) + '-' + year,
-                assignments: (Math.floor(Math.random() * 5) > 3) ? this.makeCalendarCellTestData() : [],
-                isweekend: ([6, 0].indexOf(day) !== -1),
+                assignments: ([6, 7].indexOf(day) === -1 && Math.floor(Math.random() * 5) > 3) ? this.makeCalendarCellTestData() : [],
+                isweekend: ([6, 7].indexOf(day) !== -1),
                 isColspan : isColspan,
                 string: {
                     days: DaysOfTheWeek[day],
