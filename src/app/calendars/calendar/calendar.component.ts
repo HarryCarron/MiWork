@@ -46,7 +46,7 @@ export class CalendarComponent implements OnInit {
         }
         $('.innerCalendarContainer').animate(
             { scrollTop: scrollDistance }
-            , 1000);
+            , 300);
     }
 
     ngOnInit() {

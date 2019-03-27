@@ -2,12 +2,18 @@
     <div class='cellNumber'>       
         <span>{{dayData.int.day}}</span>
     </div>
-    <div [style.font-size]="fontSize+'px'" class='cellBody'>
-        <div
+    <div class='cellBody'>
+        <div [hidden]='dayData.assignments.length > 2'
         class='assignment'
         [style.background-color] = "assignment.color"
         *ngFor="let assignment of dayData.assignments">
             <span>{{assignment.subject}}</span>
         </div>
+        <!-- <div [hidden]='dayData.assignments.length > 2'
+            class='assignment'
+            [style.background-color] = "assignment.color"
+            *ngFor="let assignment of dayData.assignments">
+                <span>{{assignment.subject}}</span>
+        </div> -->
     </div>
 </div>
