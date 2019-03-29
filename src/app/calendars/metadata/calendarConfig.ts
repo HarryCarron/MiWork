@@ -1,4 +1,6 @@
 import { DaysOfTheWeek, MonthsOfYear } from './../../enums/calendarEnums';
+import { async } from 'q';
+declare var $: any;
 export class CalendarConfig {
 
     constructor(initDate: Date, renderBleed: Boolean) {
@@ -8,6 +10,16 @@ export class CalendarConfig {
 
     private InitDate: Date = null;
     private renderBleed: Boolean = null;
+    private holidays: Array<any> = [];
+
+    private week: Array<any> = [];
+
+    private monthObj: any = {};
+
+    public getHolidays(): Promise<any> {
+        // to do; make dynamic to user location
+        return $.get( 'https://www.gov.uk/bank-holidays.json');
+    }
 
     private makeCalendarCellTestData(): Array<any> {
         const subjects = [
@@ -47,115 +59,134 @@ export class CalendarConfig {
 
     }
 
-    public makeCalendarConfig = (): object => {
+    public addHolidaysToMetadataAndOutput(holidays: Array<any>) {
+        this.holidays = this.sortHolidays(holidays['england-and-wales'].events);
+        return this.makeCalendarConfig();
+    }
+
+    private sortHolidays = (holidays: Array<any>): Array<any> => {
+        // todo: return hoidays based on users location
+        return holidays.filter(
+            (event: Array<any>) => event['date'].split('-')[0] === this.InitDate.getFullYear().toString()
+            );
+    }
+
+    private getWeekCount(date: Date): Number {
+        return Math.ceil(
+            Math.abs(1 - (date.getDay() === 0 ? 7 : date.getDay())) +
+            new Date(date.getFullYear(), date.getMonth(), 0).getDate() / 7
+        );
+    }
+
+    private pushDay(day: Object, override: boolean): void {
+        this.week.push(day);
+        if (this.week.length === 7 || override) {
+            this.monthObj.weeks.push(this.week);
+            this.clearWeek();
+        }
+    }
+
+    private checkForHoliday = (dateString: string): any => {
+        const holidayFound = this.holidays.find(function(holiday) { return holiday.date === dateString; });
+        if (holidayFound) {
+            return holidayFound;
+        } else {
+            return {title: ''};
+        }
+    }
+
+    private makeDayObject = (inputDate: Date, isColspan: boolean ): object => {
+
+        const date = inputDate.getDate();
+        const day = inputDate.getDay();
+        const month = inputDate.getMonth() + 1;
+        const year = inputDate.getFullYear();
+
+        return {
+            standardisedDate: this.padDate(date) + '-' + this.padDate(month) + '-' + year,
+            assignments: ([6, 0].indexOf(day) === -1 && Math.floor(Math.random() * 5) > 3) ? this.makeCalendarCellTestData() : [],
+            isweekend: ([6, 0].indexOf(day) !== -1),
+            isColspan : isColspan,
+            holidayInfo : this.checkForHoliday(year + '-' + this.padDate(month) + '-' + this.padDate(date) || null),
+            string: {
+                days: DaysOfTheWeek[day],
+                month: MonthsOfYear[month],
+                year: year.toString()
+            },
+            int: {
+                day: date,
+                month: month,
+                year: year
+            }
+        };
+    }
+
+    private clearWeek(): void {
+        this.week = [];
+    }
+
+    private initMonthObj(): void {
+        this.monthObj = {
+            month: null,
+            weekCount: null,
+            weeks: [],
+        };
+    }
+
+    private padDate(num: number): string {
+        let s = num + '';
+        while (s.length <= 1) {
+            s = '0' + s;
+        }
+        return s;
+    }
+
+    private makeLeadingMonthPadding(date: Date): void {
+        const dayOverwrite = date.getDay() === 0 ? 7 : date.getDay();
+        const colspanAmmount = Math.abs(1 - dayOverwrite);
+        const leadPaddingDate = new Date(date);
+        leadPaddingDate.setDate(leadPaddingDate.getDate() - colspanAmmount);
+        for (let i = 0; i < colspanAmmount; i++) {
+            this.pushDay(this.makeDayObject(leadPaddingDate, true), false);
+            leadPaddingDate.setDate(leadPaddingDate.getDate() + 1 );
+        }
+    }
+
+    private makeTrailingPadding(date: Date): void {
+        const colspanAmmount = Math.abs(this.week.length - 7);
+        for (let i = 0; i < colspanAmmount; i++) {
+            date.setDate(date.getDate() + 1);
+            this.pushDay(this.makeDayObject(date, true), false);
+        }
+    }
+
+    private makeCalendarConfig = () => {
 
         let initDate: Date = (new Date(this.InitDate.getFullYear(), 0, 1));
         const output = [];
-        let week = [];
-
-        let monthObj = null;
-
-        function getWeekCount(date: Date): Number {
-            return Math.ceil(
-                Math.abs(1 - (date.getDay() === 0 ? 7 : date.getDay())) +
-                new Date(date.getFullYear(), date.getMonth(), 0).getDate() / 7
-            );
-        }
-
-        function pushDay(day: Object, override: boolean): void {
-            week.push(day);
-            if (week.length === 7 || override) {
-                monthObj.weeks.push(week);
-                clearWeek();
-            }
-        }
-
-        const makeDayObject = (inputDate: Date, isColspan: boolean ): object => {
-
-            const date = inputDate.getDate();
-            const day = inputDate.getDay();
-            const month = inputDate.getMonth() + 1;
-            const year = inputDate.getFullYear();
-            return {
-                standardisedDate: padDate(date) + '-' + padDate(month) + '-' + year,
-                assignments: ([6, 7].indexOf(day) === -1 && Math.floor(Math.random() * 5) > 3) ? this.makeCalendarCellTestData() : [],
-                isweekend: ([6, 7].indexOf(day) !== -1),
-                isColspan : isColspan,
-                string: {
-                    days: DaysOfTheWeek[day],
-                    month: MonthsOfYear[month],
-                    year: year.toString()
-                },
-                int: {
-                    day: date,
-                    month: month,
-                    year: year
-                }
-            };
-        };
-
-        function clearWeek(): void {
-            week = [];
-        }
-
-        function initMonthObj(): void {
-            monthObj = {
-                month: null,
-                weekCount: null,
-                weeks: [],
-            };
-        }
-
-
-        function padDate(num: number): string {
-            let s = num + '';
-            while (s.length <= 1) {
-                s = '0' + s;
-            }
-            return s;
-        }
-
-        function makeLeadingMonthPadding(date: Date): void {
-            const dayOverwrite = date.getDay() === 0 ? 7 : date.getDay();
-            const colspanAmmount = Math.abs(1 - dayOverwrite);
-            const leadPaddingDate = new Date(date);
-            leadPaddingDate.setDate(leadPaddingDate.getDate() - colspanAmmount);
-            for (let i = 0; i < colspanAmmount; i++) {
-                pushDay(makeDayObject(leadPaddingDate, true), false);
-                leadPaddingDate.setDate(leadPaddingDate.getDate() + 1 );
-            }
-        }
-
-        function makeTrailingPadding(date: Date): void {
-            const colspanAmmount = Math.abs(week.length - 7);
-            for (let i = 0; i < colspanAmmount; i++) {
-                date.setDate(date.getDate() + 1);
-                pushDay(makeDayObject(date, true), false);
-            }
-        }
 
         for (let monthI = 0; monthI < 12; monthI++) {
             initDate = new Date (this.InitDate.getFullYear(), monthI, 1);
-            initMonthObj();
+            this.initMonthObj();
             const finalDay = new Date(initDate.getFullYear(), initDate.getMonth() + 1, 0).getDate() - 1;
-            monthObj.month = MonthsOfYear[(monthI + 1)];
-            monthObj.year = initDate.getFullYear();
-            monthObj.weekCount = getWeekCount(initDate);
+            this.monthObj.month = MonthsOfYear[(monthI + 1)];
+            this.monthObj.year = initDate.getFullYear();
+            this.monthObj.weekCount = this.getWeekCount(initDate);
             let dayCount = 0;
             let stopMonthLoop = false;
-            for (let weekI = 1; weekI <= monthObj.weekCount ; weekI++) {
+            for (let weekI = 1; weekI <= this.monthObj.weekCount ; weekI++) {
                 if (!stopMonthLoop) {
                     for (let dayI = 1; dayI <= 7; dayI++) {
                         dayCount++;
                         if (this.renderBleed && dayI === 1 && weekI === 1 && initDate.getDate() !== 0)  {
-                            makeLeadingMonthPadding(initDate);
+                            this.makeLeadingMonthPadding(initDate);
                         }
-                        pushDay(makeDayObject(initDate, false), false);
+                        this.pushDay(this.makeDayObject(initDate, false), false);
                         initDate.setDate(initDate.getDate() + 1);
                         if (dayCount === finalDay) {
-                            pushDay(makeDayObject(initDate, false), false);
-                            if (this.renderBleed && week.length > 0) {
-                                makeTrailingPadding(initDate);
+                            this.pushDay(this.makeDayObject(initDate, false), false);
+                            if (this.renderBleed && this.week.length > 0) {
+                                this.makeTrailingPadding(initDate);
                             }
                             stopMonthLoop = true;
                             break;
@@ -163,10 +194,9 @@ export class CalendarConfig {
                     }
                 }
             }
-            output.push(monthObj);
-            clearWeek();
+            output.push(this.monthObj);
+            this.clearWeek();
         }
-            console.log(output);
-            return output;
+        return output;
     }
 }

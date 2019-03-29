@@ -13,7 +13,8 @@ declare var $: any;
 
 export class CalendarComponent implements OnInit {
 
-    calendarMetadata: any = new CalendarConfig(new Date('2019-1-1'), true).makeCalendarConfig();
+    calendarMetadatax: any = new CalendarConfig(new Date('2019-1-1'), true);
+    calendarMetadata: any = null;
     daysOfWeek: Array<any> = Array.from({length: 7}).map((j, i) =>  DaysOfTheWeek[i + 1]);
 
     selectedMonth: number = null;
@@ -30,8 +31,8 @@ export class CalendarComponent implements OnInit {
     }
 
     public cellBackground (index: number, day: any) {
-        if ([5, 6].indexOf(index) !== -1) {
-            return 'weekend';
+        if (day.holidayInfo.title || [5, 6].indexOf(index) !== -1) {
+            return 'dayOff';
         } else if (day.isColspan) {
             return 'colspanCell';
         }
@@ -50,6 +51,8 @@ export class CalendarComponent implements OnInit {
     }
 
     ngOnInit() {
-
+        this.calendarMetadatax.getHolidays().then((res) => {
+            this.calendarMetadata = this.calendarMetadatax.addHolidaysToMetadataAndOutput(res);
+        });
     }
 }
