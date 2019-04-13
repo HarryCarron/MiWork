@@ -107,6 +107,7 @@ export class CalendarConfig {
             assignments: ([6, 0].indexOf(day) === -1 && Math.floor(Math.random() * 5) > 3) ? this.makeCalendarCellTestData() : [],
             isweekend: ([6, 0].indexOf(day) !== -1),
             isColspan : isColspan,
+            isSelected : false,
             holidayInfo : this.checkForHoliday(year + '-' + this.padDate(month) + '-' + this.padDate(date) || null),
             string: {
                 days: DaysOfTheWeek[day],

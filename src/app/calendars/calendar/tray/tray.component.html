@@ -1,3 +1,8 @@
-<p>
-  tray works!
-</p>
+<div class='trayContainer'>
+    <div class='dateTitleContainer'>
+        <span class='dateTitle' *ngIf='dateInfo' style='font-weight:bold'>{{dateInfo?.days}}</span>
+    </div>
+    <div class='timeSegment' *ngFor="let timeSegment of hoursOfDay">
+        {{timeSegment.value}}
+    </div>
+</div>

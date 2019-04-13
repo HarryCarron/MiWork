@@ -1,19 +1,22 @@
-<div class='cellContainer'>
-    <div class='cellNumber'>       
-        <span>{{dayData.int.day}}</span><span class='holidayTitle'>{{dayData.holidayInfo.title}}</span>
-    </div>
-    <div class='cellBody'>
-        <div [hidden]='dayData.assignments.length > 2'
-        class='assignment'
-        [style.background-color] = "assignment.color"
-        *ngFor="let assignment of dayData.assignments">
-            <span>{{assignment.subject}}</span>
+<div class='innerContainer' (click)='cellClicked(day);activateCell(day)'>
+    <div [hidden]='dayData.isColspan' class='cellContainer'>
+        <div class='cellNumber'>       
+            <span>{{dayData.int.day}}</span><span class='holidayTitle'>{{dayData.holidayInfo.title}}</span>
         </div>
-        <!-- <div [hidden]='dayData.assignments.length > 2'
+        <div class='cellBody'>
+            <div [hidden]='dayData.assignments.length > 2'
             class='assignment'
             [style.background-color] = "assignment.color"
             *ngFor="let assignment of dayData.assignments">
                 <span>{{assignment.subject}}</span>
-        </div> -->
+            </div>
+            <!-- <div [hidden]='dayData.assignments.length > 2'
+                class='assignment'
+                [style.background-color] = "assignment.color"
+                *ngFor="let assignment of dayData.assignments">
+                    <span>{{assignment.subject}}</span>
+            </div> -->
+        </div>
     </div>
+    
 </div>

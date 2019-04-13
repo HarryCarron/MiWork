@@ -6,7 +6,6 @@
 .mainCalendarContainer{
     background-color:white;
     height:100%;
-    width:100%;
 }
 
 .assignmentCircleContainer{
@@ -18,11 +17,11 @@
     background-color:#484848b8;
 }
 
-
 .innerCalendarContainer{
     height:calc(100% - 50px);
     overflow-x: auto;
-
+    float:left;
+    transition:1s;
 }
 
 .daysBar{
@@ -98,4 +97,22 @@ th{
 
 .innerCalendarContainer::-webkit-scrollbar { 
     display: none; 
+}
+
+.dayView{
+    position:absolute;
+    width:30%;
+    height:calc(100% - 50px);
+    float:left;
+    background-color: #e2e2e273;
+}
+
+.innerDayView{
+    border-left: 1px solid #cccccc61;
+    height:100%;
+    width:100%;
+}
+
+.noRightBorder{
+    border-right:none !important;
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MonthsOfYear } from '../enums/calendarEnums';
+declare var $: any;
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +32,6 @@ export class CalendarTools {
     static stringMonthToNumber(month: string): number {
         return MonthsOfYear[month];
     }
+
 
 }

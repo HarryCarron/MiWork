@@ -1,0 +1,21 @@
+.trayContainer{
+    width:300px;
+}
+
+.timeSegment{
+    font-size:0.8em;
+    border-bottom:1px solid #ccc;
+    padding:10px 5px;
+}
+
+.dateTitle{
+    font-size:1.3em;
+    padding:20px 10px;
+}
+
+.dateTitleContainer{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height:60px;
+}

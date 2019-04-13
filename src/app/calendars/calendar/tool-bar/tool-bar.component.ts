@@ -56,8 +56,5 @@ export class ToolBarComponent implements OnInit {
             }
         });
 
-        $('.innerCalendarContainer').scroll(() => {
-            this.selectedMonthString = null;
-        });
     }
 }

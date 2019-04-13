@@ -1,6 +1,8 @@
 <div class='mainCalendarContainer'>
 <app-tool-bar (monthSelected) = "scrollToMonth($event)" class='toolBar'></app-tool-bar>
-    <div class='innerCalendarContainer'>
+<mat-drawer-container  class="example-container">
+    <mat-drawer-content>
+        <div class='innerCalendarContainer'>
             <div id='{{"scroll-" + month.month.toLowerCase()}}' class='calendarContainer' *ngFor="let month of calendarMetadata">
             <div class='calendarHeading'><span class='calendarHeading-month'>{{month.month}}</span><span class='calendarHeading-year'> {{month.year}}</span></div>
             <table class='calendar'>
@@ -11,7 +13,11 @@
                 </thead>
                 <tbody>
                     <tr class='calendarCellRow' *ngFor="let week of month.weeks">
-                        <td [ngStyle]='cellStyle(i)' [ngClass]="cellBackground(i, day)" class='calendarCell' *ngFor="let day of week; let i = index;">
+                        <td *ngFor="let day of week; let i = index;"
+                        (click)='cellClicked(day)'
+                        [ngStyle]='cellStyle(i)'
+                        [ngClass]="cellBackground(i, day)"
+                        class='calendarCell'>
                             <app-calendar-cell [dayData]='day'></app-calendar-cell>
                         </td>
                     </tr>
@@ -19,4 +25,10 @@
             </table>
         </div>
     </div>
+    </mat-drawer-content>
+    <mat-drawer [(opened)]="drawerState" mode="side" position='end' opened>
+        <app-tray [dayData]='currentlyActiveCell'></app-tray>
+    </mat-drawer>
+  </mat-drawer-container>
+
 </div>
